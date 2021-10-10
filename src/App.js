@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+import {useEffect, useState} from 'react';
+import Select from 'react-select'
 import './App.css';
 
 function App() {
+
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const countriesData = await fetchCountries()
+      setCountries(countriesData)
+    }
+      getData()
+  }, [])
+
+  const fetchCountries = async () => {
+    const res = await fetch('https://vilmisv.github.io/jsonApiCountries/myData.json');
+    const data = await res.json()
+    console.log(data)
+    return data
+  }
+
+  const options = countries.map((country) =>({
+    "value": country.country,
+    "label": country.country
+  }))
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Select options={options}/>
     </div>
   );
 }
